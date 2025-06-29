@@ -11,6 +11,16 @@ public class Session {
     @Id
     private String id;
     private String subject;
+
+    public String getMeetingRoom() {
+        return meetingRoom;
+    }
+
+    public void setMeetingRoom(String meetingRoom) {
+        this.meetingRoom = meetingRoom;
+    }
+
+    private String meetingRoom; // ✅ Required for setMeetingRoom()
     private String notes;
     private List<String> keywords;
     private LocalDateTime startTime;

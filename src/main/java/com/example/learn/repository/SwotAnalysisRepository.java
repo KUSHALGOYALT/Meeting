@@ -7,9 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface SwotAnalysisRepository extends MongoRepository<SwotAnalysis, String> {
-    static List<SwotAnalysis> findBySessionId(String sessionId) {
-        return null;
-    }
-
+    List<SwotAnalysis> findBySessionId(String sessionId);
     Optional<SwotAnalysis> findBySessionIdAndStudentId(String sessionId, String studentId);
 }

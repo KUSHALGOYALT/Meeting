@@ -11,7 +11,17 @@ public class WeeklyQuiz {
     private String id;
     private String sessionId;
     private String content;
-    private Map<String, Map<String, Boolean>> studentAnswers; // studentId -> question -> answer
+    private Map<String, Map<String, Boolean>> studentAnswers;
+
+    public Map<String, Boolean> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(Map<String, Boolean> questions) {
+        this.questions = questions;
+    }
+
+    private Map<String, Boolean> questions;// studentId -> question -> answer
 
     // Getters and Setters
     public String getId() { return id; }

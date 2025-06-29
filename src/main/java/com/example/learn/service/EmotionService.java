@@ -1,12 +1,9 @@
 package com.example.learn.service;
-
 import com.example.learn.model.Engagement;
 import com.example.learn.repository.EngagementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Map;
-
 @Service
 public class EmotionService {
     @Autowired

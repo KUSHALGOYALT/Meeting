@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AttendanceRepository extends MongoRepository<Attendance, String> {
-    Optional<Attendance> findBySessionIdAndStudentId(String sessionId, String studentId);
     List<Attendance> findBySessionId(String sessionId);
+
+    Optional<Attendance> findBySessionIdAndStudentId(String sessionId, String studentId); // ✅ correct method
 }

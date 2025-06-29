@@ -28,9 +28,8 @@ public class SwotAnalysisService {
             // Validate session and attendance
             Session session = sessionRepository.findById(sessionId)
                     .orElseThrow(() -> new NotFoundException("Session not found: " + sessionId));
-            Attendance attendance = attendanceRepository.findBySessionIdAndStudentId(sessionId, studentId)
+            Attendance attendance = (Attendance) attendanceRepository.findBySessionIdAndStudentId(sessionId, studentId)
                     .orElseThrow(() -> new NotFoundException("Attendance not found for student: " + studentId));
-
             if (!attendance.isPresent()) {
                 throw new DatabaseException("Student must be marked present to generate SWOT analysis");
             }

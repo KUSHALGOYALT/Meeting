@@ -2,12 +2,8 @@ package com.example.learn.controller;
 
 import com.example.learn.exception.*;
 import com.example.learn.model.Session;
-import com.example.learn.service.SessionService; // ✅ FIXED: Correct class name
-
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.example.learn.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -15,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,38 +22,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 public class SessionController {
 
     @Autowired
-    private SessionService sessionService; // ✅ FIXED: Correct class name
-
-    @Value("${jwt.secret}")
-    private String jwtSecret;
-
-    @Value("${jwt.expiration}")
-    private long jwtExpiration;
-
-    @PostMapping("/auth/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
-        try {
-            String username = credentials.get("username");
-            String password = credentials.get("password");
-            String role = "STUDENT";
-            if ("user".equals(username) && "password".equals(password)) {
-                String token = Jwts.builder()
-                        .setSubject(username)
-                        .claim("role", role)
-                        .setIssuedAt(new Date())
-                        .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
-                        .signWith(SignatureAlgorithm.HS512, jwtSecret)
-                        .compact();
-                return ResponseEntity.ok(EntityModel.of(Map.of("token", token),
-                        linkTo(methodOn(SessionController.class).login(credentials)).withSelfRel()));
-            }
-            throw new AccessDeniedException("Invalid credentials");
-        } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Login failed");
-        }
-    }
+    private SessionService sessionService;
 
     @PostMapping("/attendance/{sessionId}/{studentId}/login")
     public ResponseEntity<?> recordAttendanceLogin(@PathVariable String sessionId, @PathVariable String studentId,

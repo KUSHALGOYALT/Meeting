@@ -1,14 +1,11 @@
 package com.example.learn.config;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-
 @Configuration
 public class MongoConfig {
     @Bean

@@ -1,29 +1,29 @@
 package com.example.learn.model;
 
+import lombok.Data;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-@Document(collection = "attendances")
+@Document(collection = "attendance")
+@Data
 public class Attendance {
+    @Id
+    private String studentId; // ✅ field must match
     private String id;
     private String sessionId;
-    private String studentId;
-    private LocalDateTime loginTime;
-    private LocalDateTime logoutTime;
-    private boolean isPresent;
+    private String userId;
+    private String name;
+    private String joinedAt;
+    private String leftAt;
+    private boolean present;
+    private List<EmotionEntry> emotions = new ArrayList<>();
 
-    // Getters and Setters
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
-    public String getSessionId() { return sessionId; }
-    public void setSessionId(String sessionId) { this.sessionId = sessionId; }
-    public String getStudentId() { return studentId; }
-    public void setStudentId(String studentId) { this.studentId = studentId; }
-    public LocalDateTime getLoginTime() { return loginTime; }
-    public void setLoginTime(LocalDateTime loginTime) { this.loginTime = loginTime; }
-    public LocalDateTime getLogoutTime() { return logoutTime; }
-    public void setLogoutTime(LocalDateTime logoutTime) { this.logoutTime = logoutTime; }
-    public boolean isPresent() { return isPresent; }
-    public void setPresent(boolean present) { isPresent = present; }
+    @Data
+    public static class EmotionEntry {
+        private String emotion;
+        private String timestamp;
+    }
 }
