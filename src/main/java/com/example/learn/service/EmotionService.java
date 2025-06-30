@@ -1,24 +1,47 @@
 package com.example.learn.service;
-import com.example.learn.model.Engagement;
-import com.example.learn.repository.EngagementRepository;
+
+import com.example.learn.model.EmotionData;
+import com.example.learn.repository.EmotionDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.Map;
+
+import java.util.List;
+
 @Service
 public class EmotionService {
     @Autowired
-    private EngagementRepository engagementRepository;
-    @Autowired
-    private FacialAnalysisService facialAnalysisService;
+    private EmotionDataRepository emotionRepository;
 
-    public void updateEmotionFeedback(String sessionId, String studentId) {
-        Engagement engagement = engagementRepository.findBySessionIdAndStudentId(sessionId, studentId)
-                .orElse(new Engagement());
-        Map<String, Double> emotions = facialAnalysisService.analyzeEmotions(studentId);
-        engagement.setSessionId(sessionId);
-        engagement.setStudentId(studentId);
-        engagement.setFrustrationScore(emotions.getOrDefault("frustration", 0.0));
-        engagement.setConfidenceScore(emotions.getOrDefault("confidence", 0.0));
-        engagementRepository.save(engagement);
+    public EmotionData saveEmotionData(EmotionData emotionData) {
+        return emotionRepository.save(emotionData);
+    }
+
+    public List<EmotionData> getStudentEmotions(String studentId) {
+        return emotionRepository.findByStudentId(studentId);
+    }
+
+    public List<EmotionData> getMeetingEmotions(String meetingId) {
+        return emotionRepository.findByMeetingId(meetingId);
+    }
+
+    public String getOverallMood(String studentId, String meetingId) {
+        List<EmotionData> emotions = emotionRepository.findByStudentIdAndMeetingId(studentId, meetingId);
+        if (emotions.isEmpty()) return "neutral";
+
+        // Simple mood calculation
+        int engaged = 0, neutral = 0, bored = 0, confused = 0;
+        for (EmotionData emotion : emotions) {
+            switch (emotion.getEmotion().toLowerCase()) {
+                case "engaged": engaged++; break;
+                case "neutral": neutral++; break;
+                case "bored": bored++; break;
+                case "confused": confused++; break;
+            }
+        }
+
+        if (engaged >= neutral && engaged >= bored && engaged >= confused) return "engaged";
+        if (bored >= neutral && bored >= confused) return "bored";
+        if (confused >= neutral) return "confused";
+        return "neutral";
     }
 }

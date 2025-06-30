@@ -2,11 +2,12 @@ package com.example.learn.repository;
 
 import com.example.learn.model.SwotAnalysis;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
+@Repository
 public interface SwotAnalysisRepository extends MongoRepository<SwotAnalysis, String> {
-    List<SwotAnalysis> findBySessionId(String sessionId);
-    Optional<SwotAnalysis> findBySessionIdAndStudentId(String sessionId, String studentId);
+    List<SwotAnalysis> findByStudentId(String studentId);
+    SwotAnalysis findByStudentIdAndSubject(String studentId, String subject);
 }

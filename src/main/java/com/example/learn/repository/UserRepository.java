@@ -1,10 +1,14 @@
 package com.example.learn.repository;
 
-import java.util.Optional;
+import com.example.learn.model.*;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import com.example.learn.model.User;
+import org.springframework.stereotype.Repository;
+import java.time.LocalDateTime;
+import java.util.List;
 
+@Repository
 public interface UserRepository extends MongoRepository<User, String> {
-    Optional<User> findByEmail(String email);
-    Optional<User> findByUsername(String username);
+    List<User> findByRole(String role);
+    User findByEmail(String email);
 }
+
