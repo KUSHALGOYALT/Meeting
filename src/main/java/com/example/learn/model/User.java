@@ -1,8 +1,6 @@
 package com.example.learn.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import java.time.LocalDateTime;
-import java.util.List;
 
 // User Entity (Student/Teacher/Admin)
 @Document(collection = "users")
@@ -13,14 +11,17 @@ public class User {
     private String email;
     private String role; // STUDENT, TEACHER, ADMIN
     private String avatar;
+    private String password ;
+
+
 
     // Constructors
-    public User() {}
 
-    public User(String name, String email, String role) {
+    public User(String name, String email, String role,String Password) {
         this.name = name;
         this.email = email;
         this.role = role;
+        this.password=password;
     }
 
     // Getters and Setters

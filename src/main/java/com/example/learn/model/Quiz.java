@@ -1,8 +1,12 @@
 package com.example.learn.model;
 
-import java.util.List;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+@Document(collection = "quizzes")
 public class Quiz {
+    @Id
     private String id;
     private String title;
     private String subject;

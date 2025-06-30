@@ -1,42 +1,30 @@
 package com.example.learn.model;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
-@Table(name = "meetings")
+@Document(collection = "meetings")
 public class Meeting {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(nullable = false)
     private String title;
-
     private String description;
-
-    @Column(nullable = false)
     private LocalDateTime startTime;
-
-    @Column(nullable = false)
     private LocalDateTime endTime;
-
-    @Column(nullable = false)
     private String teacherId;
-
-    @ElementCollection
-    @CollectionTable(name = "meeting_students", joinColumns = @JoinColumn(name = "meeting_id"))
-    @Column(name = "student_id")
     private List<String> studentIds;
-
-    @Enumerated(EnumType.STRING)
     private MeetingStatus status = MeetingStatus.SCHEDULED;
-
-    @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    // Constructors
+
+
+
+
+
+// Constructors
     public Meeting() {}
 
     public Meeting(String title, String description, LocalDateTime startTime,

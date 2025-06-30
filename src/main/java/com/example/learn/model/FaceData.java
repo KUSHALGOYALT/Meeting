@@ -1,30 +1,19 @@
 package com.example.learn.model;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "face_data")
+@Document(collection = "face_data")
 public class FaceData {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-
-    @Column(nullable = false)
     private String studentId;
-
-    @Column(nullable = false)
     private String meetingId;
-
-    @Column(nullable = false, length = 10000)
     private String faceEncoding;
-
-    @Column(nullable = false)
     private LocalDateTime timestamp = LocalDateTime.now();
-    @Column(nullable = false)
     private String verified;
 
-    // Constructors
     public FaceData() {}
 
     public FaceData(String studentId, String meetingId, String faceEncoding) {
@@ -33,7 +22,10 @@ public class FaceData {
         this.faceEncoding = faceEncoding;
     }
 
-    // Getters and Setters
+
+
+
+// Getters and Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 

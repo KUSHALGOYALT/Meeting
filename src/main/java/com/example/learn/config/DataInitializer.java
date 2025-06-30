@@ -5,6 +5,8 @@ import com.example.learn.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,41 +24,54 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Check if data already exists
-        if (userRepository.count() > 0) {
-            return; // Data already initialized
-        }
+        if (userRepository.count() > 0) return;
 
-        // Create sample students
+        // Sample students
         List<User> students = Arrays.asList(
-                new User("Rahul Sharma", "rahul@example.com", "STUDENT"),
-                new User("Priya Patel", "priya@example.com", "STUDENT"),
-                new User("Amit Kumar", "amit@example.com", "STUDENT"),
-                new User("Sneha Gupta", "sneha@example.com", "STUDENT"),
-                new User("Arjun Singh", "arjun@example.com", "STUDENT")
+                new User("Rahul Sharma", "rahul@example.com", "default123", "STUDENT"),
+                new User("Priya Patel", "priya@example.com", "default123", "STUDENT"),
+                new User("Amit Kumar", "amit@example.com", "default123", "STUDENT"),
+                new User("Sneha Gupta", "sneha@example.com", "default123", "STUDENT"),
+                new User("Arjun Singh", "arjun@example.com", "default123", "STUDENT")
         );
         userRepository.saveAll(students);
 
-        // Create sample teachers
+        // Sample teachers
         List<User> teachers = Arrays.asList(
-                new User("Dr. Sunita Mehta", "sunita@example.com", "TEACHER"),
-                new User("Prof. Rajesh Verma", "rajesh@example.com", "TEACHER")
+                new User("Dr. Sunita Mehta", "sunita@example.com", "default123", "TEACHER"),
+                new User("Prof. Rajesh Verma", "rajesh@example.com", "default123", "TEACHER")
         );
         userRepository.saveAll(teachers);
 
-        // Create admin
-        User admin = new User("Admin User", "admin@example.com", "ADMIN");
+        // Admin
+        User admin = new User("Admin User", "admin@example.com", "admin123", "ADMIN");
         userRepository.save(admin);
 
-        // Create sample meetings
-        List<Meeting> meetings = Arrays.asList(
-                new Meeting("Mathematics Class", teachers.get(0).getId(), "math-room-101"),
-                new Meeting("Science Lab Session", teachers.get(1).getId(), "science-lab-202"),
-                new Meeting("English Literature", teachers.get(0).getId(), "english-room-103")
-        );
-        meetingRepository.saveAll(meetings);
+        // Sample meetings
+        Meeting m1 = new Meeting();
+        m1.setTitle("Mathematics Class");
+        m1.setTeacherId(teachers.get(0).getId());
+        m1.setDescription("math-room-101");
+        m1.setStartTime(LocalDateTime.now());
+        m1.setEndTime(LocalDateTime.now().plusHours(1));
 
-        // Create sample SWOT analyses
+        Meeting m2 = new Meeting();
+        m2.setTitle("Science Lab Session");
+        m2.setTeacherId(teachers.get(1).getId());
+        m2.setDescription("science-lab-202");
+        m2.setStartTime(LocalDateTime.now());
+        m2.setEndTime(LocalDateTime.now().plusHours(1));
+
+        Meeting m3 = new Meeting();
+        m3.setTitle("English Literature");
+        m3.setTeacherId(teachers.get(0).getId());
+        m3.setDescription("english-room-103");
+        m3.setStartTime(LocalDateTime.now());
+        m3.setEndTime(LocalDateTime.now().plusHours(1));
+
+        meetingRepository.saveAll(Arrays.asList(m1, m2, m3));
+
+        // Sample SWOTs
         SwotAnalysis swot1 = new SwotAnalysis(students.get(0).getId(), "Mathematics");
         swot1.setStrengths(Arrays.asList("Good analytical skills", "Quick problem solving"));
         swot1.setWeaknesses(Arrays.asList("Struggles with complex equations"));
@@ -74,8 +89,5 @@ public class DataInitializer implements CommandLineRunner {
         swotRepository.saveAll(Arrays.asList(swot1, swot2));
 
         System.out.println("Sample data initialized successfully!");
-        System.out.println("Students: " + students.size());
-        System.out.println("Teachers: " + teachers.size());
-        System.out.println("Meetings: " + meetings.size());
     }
 }

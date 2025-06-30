@@ -1,32 +1,20 @@
 package com.example.learn.model;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "emotion_data")
+@Document(collection = "emotion_data")
 public class EmotionData {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-
-    @Column(nullable = false)
     private String studentId;
-
-    @Column(nullable = false)
     private String meetingId;
-
-    @Column(nullable = false)
     private String emotion;
-
-    @Column(nullable = false)
     private Double confidence;
-
-    @Column(nullable = false)
     private LocalDateTime timestamp = LocalDateTime.now();
 
-    // Constructors
-    public EmotionData(String string, String studentId, String engaged, LocalDateTime now) {}
+    public EmotionData(String id, String studentId, String emotion, LocalDateTime timestamp) {}
 
     public EmotionData(String studentId, String meetingId, String emotion, Double confidence) {
         this.studentId = studentId;
@@ -35,7 +23,11 @@ public class EmotionData {
         this.confidence = confidence;
     }
 
-    // Getters and Setters
+
+
+
+
+// Getters and Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
