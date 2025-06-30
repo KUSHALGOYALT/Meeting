@@ -1,20 +1,28 @@
 package com.example.learn.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-// Face Recognition Data Entity
-@Document(collection = "face_data")
+@Entity
+@Table(name = "face_data")
 public class FaceData {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
+    @Column(nullable = false)
     private String studentId;
+
+    @Column(nullable = false)
     private String meetingId;
-    private String faceEncoding; // Base64 encoded face features
-    private boolean verified;
-    private LocalDateTime timestamp;
+
+    @Column(nullable = false, length = 10000)
+    private String faceEncoding;
+
+    @Column(nullable = false)
+    private LocalDateTime timestamp = LocalDateTime.now();
+    @Column(nullable = false)
+    private String verified;
 
     // Constructors
     public FaceData() {}
@@ -23,8 +31,6 @@ public class FaceData {
         this.studentId = studentId;
         this.meetingId = meetingId;
         this.faceEncoding = faceEncoding;
-        this.verified = false;
-        this.timestamp = LocalDateTime.now();
     }
 
     // Getters and Setters
@@ -40,9 +46,14 @@ public class FaceData {
     public String getFaceEncoding() { return faceEncoding; }
     public void setFaceEncoding(String faceEncoding) { this.faceEncoding = faceEncoding; }
 
-    public boolean isVerified() { return verified; }
-    public void setVerified(boolean verified) { this.verified = verified; }
-
     public LocalDateTime getTimestamp() { return timestamp; }
     public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
+
+    public void setVerified(boolean verified) {
+        this.verified = String.valueOf(verified);
+    }
+
+    public String isVerified() {
+        return verified;
+    }
 }

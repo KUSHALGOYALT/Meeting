@@ -1,6 +1,7 @@
 package com.example.learn.service;
 
 import com.example.learn.model.Meeting;
+import com.example.learn.model.MeetingStatus;
 import com.example.learn.repository.MeetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class MeetingService {
         Optional<Meeting> meeting = meetingRepository.findById(meetingId);
         if (meeting.isPresent()) {
             Meeting m = meeting.get();
-            m.setStatus("ACTIVE");
+            m.setStatus(MeetingStatus.valueOf("ACTIVE"));
             m.setStartTime(LocalDateTime.now());
             return meetingRepository.save(m);
         }
@@ -37,7 +38,7 @@ public class MeetingService {
         Optional<Meeting> meeting = meetingRepository.findById(meetingId);
         if (meeting.isPresent()) {
             Meeting m = meeting.get();
-            m.setStatus("COMPLETED");
+            m.setStatus(MeetingStatus.valueOf("COMPLETED"));
             m.setEndTime(LocalDateTime.now());
             return meetingRepository.save(m);
         }

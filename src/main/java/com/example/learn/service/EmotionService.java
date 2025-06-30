@@ -1,47 +1,32 @@
 package com.example.learn.service;
 
 import com.example.learn.model.EmotionData;
-import com.example.learn.repository.EmotionDataRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class EmotionService {
-    @Autowired
-    private EmotionDataRepository emotionRepository;
-
-    public EmotionData saveEmotionData(EmotionData emotionData) {
-        return emotionRepository.save(emotionData);
+    // Mock implementation for testing; replace with actual data source
+    public List<EmotionData> getStudentEmotions(String studentId) {
+        return List.of(
+                new EmotionData(UUID.randomUUID().toString(), studentId, "engaged", LocalDateTime.now()),
+                new EmotionData(UUID.randomUUID().toString(), studentId, "bored", LocalDateTime.now()),
+                new EmotionData(UUID.randomUUID().toString(), studentId, "confused", LocalDateTime.now())
+        );
     }
 
-    public List<EmotionData> getStudentEmotions(String studentId) {
-        return emotionRepository.findByStudentId(studentId);
+    public EmotionData saveEmotionData(EmotionData emotionData) {
+        return null;
     }
 
     public List<EmotionData> getMeetingEmotions(String meetingId) {
-        return emotionRepository.findByMeetingId(meetingId);
+        return null;
     }
 
     public String getOverallMood(String studentId, String meetingId) {
-        List<EmotionData> emotions = emotionRepository.findByStudentIdAndMeetingId(studentId, meetingId);
-        if (emotions.isEmpty()) return "neutral";
-
-        // Simple mood calculation
-        int engaged = 0, neutral = 0, bored = 0, confused = 0;
-        for (EmotionData emotion : emotions) {
-            switch (emotion.getEmotion().toLowerCase()) {
-                case "engaged": engaged++; break;
-                case "neutral": neutral++; break;
-                case "bored": bored++; break;
-                case "confused": confused++; break;
-            }
-        }
-
-        if (engaged >= neutral && engaged >= bored && engaged >= confused) return "engaged";
-        if (bored >= neutral && bored >= confused) return "bored";
-        if (confused >= neutral) return "confused";
-        return "neutral";
+        return null;
     }
 }

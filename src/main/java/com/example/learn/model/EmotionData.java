@@ -1,30 +1,38 @@
 package com.example.learn.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-// Emotion Data Entity
-@Document(collection = "emotions")
+@Entity
+@Table(name = "emotion_data")
 public class EmotionData {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
+    @Column(nullable = false)
     private String studentId;
+
+    @Column(nullable = false)
     private String meetingId;
-    private String emotion; // engaged, neutral, bored, confused
-    private double confidence;
-    private LocalDateTime timestamp;
+
+    @Column(nullable = false)
+    private String emotion;
+
+    @Column(nullable = false)
+    private Double confidence;
+
+    @Column(nullable = false)
+    private LocalDateTime timestamp = LocalDateTime.now();
 
     // Constructors
-    public EmotionData() {}
+    public EmotionData(String string, String studentId, String engaged, LocalDateTime now) {}
 
-    public EmotionData(String studentId, String meetingId, String emotion, double confidence) {
+    public EmotionData(String studentId, String meetingId, String emotion, Double confidence) {
         this.studentId = studentId;
         this.meetingId = meetingId;
         this.emotion = emotion;
         this.confidence = confidence;
-        this.timestamp = LocalDateTime.now();
     }
 
     // Getters and Setters
@@ -40,8 +48,8 @@ public class EmotionData {
     public String getEmotion() { return emotion; }
     public void setEmotion(String emotion) { this.emotion = emotion; }
 
-    public double getConfidence() { return confidence; }
-    public void setConfidence(double confidence) { this.confidence = confidence; }
+    public Double getConfidence() { return confidence; }
+    public void setConfidence(Double confidence) { this.confidence = confidence; }
 
     public LocalDateTime getTimestamp() { return timestamp; }
     public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }

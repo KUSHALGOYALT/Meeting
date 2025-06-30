@@ -7,42 +7,41 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class SwotService {
     @Autowired
+    private EmotionService emotionService;
+    @Autowired
     private SwotAnalysisRepository swotRepository;
 
-    public SwotAnalysis createSwotAnalysis(SwotAnalysis swot) {
+    public SwotAnalysis generateSimpleSwot(String studentId, String subject, List<EmotionData> emotions) {
+        emotions = emotionService.getStudentEmotions(studentId);
+        // Process emotions to generate SWOT
+        SwotAnalysis swot = new SwotAnalysis();
+        swot.setId(UUID.randomUUID().toString());
+        swot.setStudentId(studentId);
+        swot.setSubject(subject);
+        swot.setStrengths(emotions.stream()
+                .filter(e -> e.getEmotion().equals("engaged"))
+                .map(e -> "Engaged in " + subject + " at " + e.getTimestamp())
+                .toList());
+        swot.setWeaknesses(emotions.stream()
+                .filter(e -> e.getEmotion().equals("confused"))
+                .map(e -> "Confused in " + subject + " at " + e.getTimestamp())
+                .toList());
+        swot.setOpportunities(List.of("Additional practice sessions"));
+        swot.setThreats(List.of("Time management issues"));
+        swot.setAiRecommendations("Focus on areas of confusion with targeted exercises.");
         return swotRepository.save(swot);
+    }
+
+    public SwotAnalysis createSwotAnalysis(SwotAnalysis swot) {
+        return null;
     }
 
     public List<SwotAnalysis> getStudentSwot(String studentId) {
-        return swotRepository.findByStudentId(studentId);
-    }
-
-    public SwotAnalysis generateSimpleSwot(String studentId, String subject, List<EmotionData> emotions) {
-        SwotAnalysis swot = new SwotAnalysis(studentId, subject);
-
-        // Simple AI-like analysis based on emotions
-        long engagedCount = emotions.stream().mapToLong(e -> "engaged".equals(e.getEmotion()) ? 1 : 0).sum();
-        long boredCount = emotions.stream().mapToLong(e -> "bored".equals(e.getEmotion()) ? 1 : 0).sum();
-        long confusedCount = emotions.stream().mapToLong(e -> "confused".equals(e.getEmotion()) ? 1 : 0).sum();
-
-        // Generate basic SWOT
-        if (engagedCount > emotions.size() * 0.6) {
-            swot.setStrengths(List.of("High engagement level", "Active participation"));
-        } else {
-            swot.setWeaknesses(List.of("Low engagement", "Needs attention"));
-        }
-
-        if (confusedCount > emotions.size() * 0.3) {
-            swot.setWeaknesses(List.of("Difficulty understanding concepts", "Needs additional support"));
-            swot.setOpportunities(List.of("Extra tutoring sessions", "Visual learning aids"));
-        }
-
-        swot.setAiRecommendations("Based on emotion analysis: Focus on interactive content to maintain engagement.");
-
-        return swotRepository.save(swot);
+        return null;
     }
 }
