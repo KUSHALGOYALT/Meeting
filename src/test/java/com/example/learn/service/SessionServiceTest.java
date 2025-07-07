@@ -1,6 +1,5 @@
 package com.example.learn.service;
 
-import com.example.learn.model.Session;
 import com.example.learn.repository.SessionRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

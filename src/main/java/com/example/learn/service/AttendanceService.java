@@ -1,41 +1,54 @@
 package com.example.learn.service;
 
-import com.example.learn.model.Attendance;
-import com.example.learn.repository.AttendanceRepository;
+import com.example.learn.model.AttendanceRecord;
+import com.example.learn.repository.AttendanceRecordRepository;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 @Service
 public class AttendanceService {
+
     @Autowired
-    private AttendanceRepository attendanceRepository;
+    private AttendanceRecordRepository attendanceRecordRepository;
 
-    public Attendance markAttendance(String meetingId, String studentId) {
-        Attendance existing = attendanceRepository.findByMeetingIdAndStudentId(meetingId, studentId);
-        if (existing == null) {
-            Attendance attendance = new Attendance(meetingId, studentId);
-            return attendanceRepository.save(attendance);
+    public List<AttendanceRecord> getMeetingAttendance(String meetingId) {
+        return attendanceRecordRepository.findByMeetingId(meetingId);
+    }
+
+    public List<AttendanceRecord> getParticipantAttendance(String participantEmail) {
+        return attendanceRecordRepository.findByParticipantEmail(participantEmail);
+    }
+
+    public byte[] exportAttendanceToExcel(String meetingId) {
+        List<AttendanceRecord> records = attendanceRecordRepository.findByMeetingId(meetingId);
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            Sheet sheet = workbook.createSheet("Attendance");
+            Row header = sheet.createRow(0);
+            header.createCell(0).setCellValue("Participant Email");
+            header.createCell(1).setCellValue("Participant Name");
+            header.createCell(2).setCellValue("Join Time");
+            header.createCell(3).setCellValue("Leave Time");
+
+            int rowNum = 1;
+            for (AttendanceRecord record : records) {
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue(record.getParticipantEmail());
+                row.createCell(1).setCellValue(record.getParticipantName());
+                row.createCell(2).setCellValue(record.getJoinTime());
+                row.createCell(3).setCellValue(record.getLeaveTime() != null ? record.getLeaveTime() : "N/A");
+            }
+
+            workbook.write(out);
+            return out.toByteArray();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to generate Excel file", e);
         }
-        return existing;
-    }
-
-    public Attendance markLeave(String meetingId, String studentId) {
-        Attendance attendance = attendanceRepository.findByMeetingIdAndStudentId(meetingId, studentId);
-        if (attendance != null) {
-            attendance.setLeaveTime(LocalDateTime.now());
-            return attendanceRepository.save(attendance);
-        }
-        return null;
-    }
-
-    public List<Attendance> getMeetingAttendance(String meetingId) {
-        return attendanceRepository.findByMeetingId(meetingId);
-    }
-
-    public List<Attendance> getStudentAttendance(String studentId) {
-        return attendanceRepository.findByStudentId(studentId);
     }
 }

@@ -1,6 +1,5 @@
 package com.example.learn.service;
 
-import com.example.learn.model.EmotionData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
