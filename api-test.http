@@ -1,0 +1,71 @@
+### User Authentication API Tests
+### Use this file with REST Client extension in VS Code or import to Postman
+
+### 1. Register a new user
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+    "username": "john_doe",
+    "email": "john@example.com",
+    "password": "password123"
+}
+
+### 2. Register another user
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+    "username": "jane_smith",
+    "email": "jane@example.com",
+    "password": "password456"
+}
+
+### 3. Login as first user
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+    "username": "john_doe",
+    "password": "password123"
+}
+
+### 4. Login as second user
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+    "username": "jane_smith",
+    "password": "password456"
+}
+
+### 5. Get current user profile (requires JWT token)
+GET http://localhost:8080/api/user/profile?username=john_doe
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### 6. Get user by ID (requires JWT token)
+GET http://localhost:8080/api/user/USER_ID_HERE
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### 7. Get all active users (requires JWT token)
+GET http://localhost:8080/api/user/active
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### 8. Get all users (requires JWT token)
+GET http://localhost:8080/api/user/all
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### 9. Deactivate user (requires JWT token)
+PUT http://localhost:8080/api/user/USER_ID_HERE/deactivate
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### 10. Activate user (requires JWT token)
+PUT http://localhost:8080/api/user/USER_ID_HERE/activate
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+### Notes:
+### - Replace YOUR_JWT_TOKEN_HERE with the actual JWT token received from login
+### - Replace USER_ID_HERE with actual user UUID
+### - All endpoints require authentication with JWT token
+### - The application uses SHA256 password hashing
+### - All users have the same role (USER) 
